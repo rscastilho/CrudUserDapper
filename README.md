@@ -1,1 +1,3 @@
-# CrudUserDapper
+- Crud basico para cadastro de usuarios utilizando C# .net;
+- Primeiro projeto utilizando Dapper e SQL Server;
+- Retornando aos estudos de .net apos alguns anos desenvolvendo em NodeJs;
