@@ -20,10 +20,16 @@ namespace CrudUserDapper.Services
 
         public async Task<ResponseModel<ListarUsuariosDTO>> BuscarUsuarioPorId(int usuarioid)
         {
+            //instanciando a model para retorno de informações;
             ResponseModel<ListarUsuariosDTO> response = new ResponseModel<ListarUsuariosDTO>();
 
+            //criando conexao com bando de dados. 
+            //utiliznado using - fechamento da conexao apos fechar o bloco;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
+                
+                //query quando tem retorno de dados - getall ou get id
+                //execute quando nao tem retorno de dados - post / put / delete
                 var usuarioPorId = await connection.QueryFirstOrDefaultAsync<Usuario>("select * from usuarios where id = @id", new
                 {
                     id = usuarioid
@@ -36,6 +42,8 @@ namespace CrudUserDapper.Services
                     return response;
                 }
 
+                //mapeando o retorno para dto utiliznado o mapper
+                
                 var usuarioMapeado = _mapper.Map<ListarUsuariosDTO>(usuarioPorId);
                 response.Dados = usuarioMapeado;
                 response.Mensagem = "usuario localizado";
