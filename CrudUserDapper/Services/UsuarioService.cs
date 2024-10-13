@@ -2,6 +2,7 @@
 using CrudUserDapper.DTO;
 using CrudUserDapper.Model;
 using Dapper;
+using MySqlConnector;
 using System.Data.SqlClient;
 
 namespace CrudUserDapper.Services
@@ -25,7 +26,8 @@ namespace CrudUserDapper.Services
 
             //criando conexao com bando de dados. 
             //utiliznado using - fechamento da conexao apos fechar o bloco;
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 
                 //query quando tem retorno de dados - getall ou get id
@@ -55,8 +57,9 @@ namespace CrudUserDapper.Services
 
         public async Task<ResponseModel<List<ListarUsuariosDTO>>> CriarUsuario(CriarUsuarioDto criarUsuarioDto)
         {
-            ResponseModel<List<ListarUsuariosDTO>> response = new ResponseModel<List<ListarUsuariosDTO>>();
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            ResponseModel<List<ListarUsuariosDTO>> response = new();
+            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var usuarioBanco = await connection.ExecuteAsync("insert into usuarios (nome, email, CPF, Situacao, password) values(@nome, @email, @CPF, @Situacao, @password)", criarUsuarioDto);
                 if (usuarioBanco == 0)
@@ -79,7 +82,8 @@ namespace CrudUserDapper.Services
         public async Task<ResponseModel<List<ListarUsuariosDTO>>> EditarUsuario(EditarUsuarioDto editarUsuarioDto)
         {
             ResponseModel<List<ListarUsuariosDTO>> response = new ResponseModel<List<ListarUsuariosDTO>>();
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var usuarioBanco = await connection.ExecuteAsync("update usuarios set nome = @nome, email = @email, CPF=@CPF, situacao = @situacao where id = @id", editarUsuarioDto);
 
@@ -105,7 +109,8 @@ namespace CrudUserDapper.Services
             ResponseModel<List<ListarUsuariosDTO>> response = new ResponseModel<List<ListarUsuariosDTO>>();
 
 
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var usuariosBanco = await connection.QueryAsync<Usuario>("select * from usuarios");
                 if (usuariosBanco.Count() == 0)
@@ -128,7 +133,8 @@ namespace CrudUserDapper.Services
         public async Task<ResponseModel<List<ListarUsuariosDTO>>> RemoverUsuario(int usuarioId)
         {
             ResponseModel<List<ListarUsuariosDTO>> response = new ResponseModel<List<ListarUsuariosDTO>>();
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            //using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            using (var connection = new MySqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 var usuarioBanco = await connection.ExecuteAsync("delete from usuarios where id = @id", new { id = usuarioId });
                 if (usuarioBanco == 0)
